@@ -1,0 +1,9 @@
+# Semgrep ignore rules for onvif-inspector
+*.test
+*.out
+coverage.out
+dist/
+build/
+bin/
+vendor/
+docs/

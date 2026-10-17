@@ -29,12 +29,12 @@ var (
 )
 
 type cameraWorker struct {
-	dev     discovery.DiscoveredDevice
-	client  *onvif.Client
-	subMgr  *onvif.SubscriptionManager
-	hub     *hub.Hub
-	debug   bool
-	logger  *log.Logger
+	dev    discovery.DiscoveredDevice
+	client *onvif.Client
+	subMgr *onvif.SubscriptionManager
+	hub    *hub.Hub
+	debug  bool
+	logger *log.Logger
 }
 
 type appCoordinator struct {
@@ -124,14 +124,14 @@ func (c *appCoordinator) AttachCamera(dev discovery.DiscoveredDevice) {
 
 	// Initial registration in hub
 	c.hub.UpdateDevice(hub.DeviceStatus{
-		Endpoint:     dev.Endpoint,
-		IP:           dev.IP,
-		Port:         dev.Port,
-		Name:         dev.Name,
-		Model:        dev.Model,
-		State:        string(onvif.StateReconnecting),
-		StateReason:  "Connecting...",
-		PingLatency:  dev.PingLatency,
+		Endpoint:    dev.Endpoint,
+		IP:          dev.IP,
+		Port:        dev.Port,
+		Name:        dev.Name,
+		Model:       dev.Model,
+		State:       string(onvif.StateReconnecting),
+		StateReason: "Connecting...",
+		PingLatency: dev.PingLatency,
 	})
 
 	go c.runCameraWorker(key, dev)

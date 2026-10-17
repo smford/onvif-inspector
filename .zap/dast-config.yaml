@@ -1,0 +1,4 @@
+default:
+  username: admin
+  password: adminpassword
+cameras: []

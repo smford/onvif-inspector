@@ -462,19 +462,19 @@ func (m Model) renderHelp() string {
 	}
 
 	if m.selectedCamFilter != "" {
-		keys = append(keys, keyStyle.Render("Esc/Enter") + descStyle.Render(":All Cams"))
+		keys = append(keys, keyStyle.Render("Esc/Enter")+descStyle.Render(":All Cams"))
 	} else if m.activePane == PaneDevices {
-		keys = append(keys, keyStyle.Render("Enter") + descStyle.Render(":Filter Cam"))
+		keys = append(keys, keyStyle.Render("Enter")+descStyle.Render(":Filter Cam"))
 	}
 
 	keys = append(keys,
-		keyStyle.Render("c") + descStyle.Render(":Config"),
-		keyStyle.Render("a") + descStyle.Render(":Add"),
-		keyStyle.Render("d") + descStyle.Render(":Defaults"),
-		keyStyle.Render("/") + descStyle.Render(":Search"),
-		keyStyle.Render("x") + descStyle.Render(":XML"),
-		keyStyle.Render("Space") + descStyle.Render(":Pause"),
-		keyStyle.Render("q") + descStyle.Render(":Quit"),
+		keyStyle.Render("c")+descStyle.Render(":Config"),
+		keyStyle.Render("a")+descStyle.Render(":Add"),
+		keyStyle.Render("d")+descStyle.Render(":Defaults"),
+		keyStyle.Render("/")+descStyle.Render(":Search"),
+		keyStyle.Render("x")+descStyle.Render(":XML"),
+		keyStyle.Render("Space")+descStyle.Render(":Pause"),
+		keyStyle.Render("q")+descStyle.Render(":Quit"),
 	)
 
 	helpBar := strings.Join(keys, "  ")

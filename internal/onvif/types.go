@@ -27,9 +27,9 @@ const (
 
 // SecurityHeader represents the WS-Security header structure
 type SecurityHeader struct {
-	XMLName       xml.Name      `xml:"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd Security"`
-	MustUnderstand string       `xml:"http://www.w3.org/2003/05/soap-envelope mustUnderstand,attr,omitempty"`
-	UsernameToken UsernameToken `xml:"UsernameToken"`
+	XMLName        xml.Name      `xml:"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd Security"`
+	MustUnderstand string        `xml:"http://www.w3.org/2003/05/soap-envelope mustUnderstand,attr,omitempty"`
+	UsernameToken  UsernameToken `xml:"UsernameToken"`
 }
 
 // UsernameToken represents the WS-Security UsernameToken element
@@ -159,7 +159,7 @@ type CapabilitiesResponse struct {
 			XAddr string `xml:"XAddr"`
 		} `xml:"Device"`
 		Events struct {
-			XAddr               string `xml:"XAddr"`
+			XAddr                       string `xml:"XAddr"`
 			WSSubscriptionPolicySupport bool   `xml:"WSSubscriptionPolicySupport"`
 			WSPullPointSupport          bool   `xml:"WSPullPointSupport"`
 		} `xml:"Events"`

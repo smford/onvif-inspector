@@ -34,25 +34,25 @@ type Options struct {
 
 // Model is the main state of the Terminal User Interface
 type Model struct {
-	hub            *hub.Hub
-	eventCh        <-chan hub.Event
-	deviceCh       <-chan hub.DeviceStatus
-	unsubEvent     func()
-	unsubDevice    func()
+	hub         *hub.Hub
+	eventCh     <-chan hub.Event
+	deviceCh    <-chan hub.DeviceStatus
+	unsubEvent  func()
+	unsubDevice func()
 
 	appConfig      *config.Config
 	onConfigUpdate ConfigUpdateFunc
 
-	activePane     ActivePane
-	devices        []hub.DeviceStatus
-	deviceIndex    int
+	activePane  ActivePane
+	devices     []hub.DeviceStatus
+	deviceIndex int
 
 	events         []hub.Event
 	filteredEvents []hub.Event
 	eventIndex     int
 
-	paused         bool
-	showRawXML     bool
+	paused          bool
+	showRawXML      bool
 	inspectorScroll int
 
 	filterInput       textinput.Model
@@ -62,15 +62,15 @@ type Model struct {
 	selectedCamName   string // Display name of selected camera
 
 	// Camera Configuration Dialog State
-	isConfiguring  bool
-	configInputs   [4]textinput.Model // 0: Name, 1: Target, 2: Username, 3: Password
-	configFocus    int                // 0, 1, 2, 3, or 4 (Save button)
-	configMessage  string             // Status / error message
-	configErr      bool
+	isConfiguring bool
+	configInputs  [4]textinput.Model // 0: Name, 1: Target, 2: Username, 3: Password
+	configFocus   int                // 0, 1, 2, 3, or 4 (Save button)
+	configMessage string             // Status / error message
+	configErr     bool
 
-	width          int
-	height         int
-	ready          bool
+	width  int
+	height int
+	ready  bool
 }
 
 // NewModel initializes the TUI model

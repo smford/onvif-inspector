@@ -345,4 +345,3 @@ func TestTUIDevicesPaneRowLayoutAndAlignment(t *testing.T) {
 		}
 	}
 }
-

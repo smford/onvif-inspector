@@ -1,0 +1,39 @@
+# .gh-stats.yml - Configuration for gh-stats SRE Code Health Analysis
+# https://github.com/smford/gh-stats
+
+thresholds:
+  max_pr_lines: 800
+  stale_pr_days: 14
+  min_test_ratio: 0.2
+  max_discussions: 15
+  commit_limit: 250
+  max_ci_latency_minutes: 15
+  fail_on_flaky_ci: false
+
+blast_radius:
+  custom_patterns:
+    - category: "ONVIF Protocol & Events"
+      pattern: "internal/onvif/**"
+      description: "ONVIF SOAP client, WS-UsernameToken digest, PullPoint subscriptions, and XML event normalization"
+    - category: "Central Event Hub"
+      pattern: "internal/hub/**"
+      description: "In-memory event hub, ring buffer, device state management, and pub/sub engine"
+    - category: "Web Interface & API"
+      pattern: "internal/web/**"
+      description: "Embedded web server, SSE event stream, REST endpoints, and Web UI"
+    - category: "Terminal User Interface"
+      pattern: "internal/tui/**"
+      description: "Bubbletea TUI, responsive panels, event detail view, and keyboard navigation"
+    - category: "Network Discovery"
+      pattern: "internal/discovery/**"
+      description: "WS-Discovery UDP multicast engine and ICMP ping latency measurements"
+    - category: "CI/CD & DevSecOps"
+      pattern: ".github/workflows/**"
+      description: "GitHub Actions workflow automation, security scanning, and release pipelines"
+
+ignore:
+  paths:
+    - "vendor/**"
+    - "**/*_gen.go"
+    - "docs/**"
+    - "config.yaml.example"

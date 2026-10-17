@@ -55,6 +55,17 @@ func TestWebServerEndpoints(t *testing.T) {
 		t.Errorf("missing title in index.html response: %s", rec.Body.String()[:100])
 	}
 
+	// 1b. Test /healthz
+	req = httptest.NewRequest(http.MethodGet, "/healthz", nil)
+	rec = httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200 for /healthz, got %d", rec.Code)
+	}
+	if !strings.Contains(rec.Body.String(), `"status":"ok"`) {
+		t.Errorf("unexpected healthz body: %s", rec.Body.String())
+	}
+
 	// 2. Test /api/devices
 	req = httptest.NewRequest(http.MethodGet, "/api/devices", nil)
 	rec = httptest.NewRecorder()

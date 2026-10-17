@@ -13,8 +13,8 @@ import (
 )
 
 type testHandler struct {
-	mu           sync.Mutex
-	statusEvents []SubscriptionState
+	mu            sync.Mutex
+	statusEvents  []SubscriptionState
 	notifications []NotificationMessage
 }
 

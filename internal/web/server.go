@@ -60,6 +60,9 @@ func NewServer(cfg Config) *Server {
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 
+	// Healthcheck endpoint
+	mux.HandleFunc("/healthz", s.handleHealthz)
+
 	// REST endpoints
 	mux.HandleFunc("/api/devices", s.handleGetDevices)
 	mux.HandleFunc("/api/events", s.handleGetEvents)
@@ -317,5 +320,13 @@ func (s *Server) handleConfigDefault(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(map[string]any{
 		"status":  "ok",
 		"message": fmt.Sprintf("Default credentials saved to %s", s.appConfig.FilePath()),
+	})
+}
+
+func (s *Server) handleHealthz(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(map[string]string{
+		"status": "ok",
 	})
 }

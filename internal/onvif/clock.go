@@ -57,7 +57,7 @@ func ParseSystemDateAndTimeResponse(xmlData []byte) (time.Time, error) {
 		Body    struct {
 			Fault *struct {
 				Code   struct{ Value string } `xml:"Code"`
-				Reason struct{ Text  string } `xml:"Reason"`
+				Reason struct{ Text string }  `xml:"Reason"`
 			} `xml:"Fault"`
 			GetSystemDateAndTimeResponse struct {
 				SystemDateAndTime struct {

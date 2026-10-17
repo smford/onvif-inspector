@@ -27,9 +27,9 @@ type Client struct {
 	Debug       bool
 	DebugLogger *log.Logger
 
-	mu           sync.RWMutex
-	EventsXAddr  string
-	DeviceInfo   *DeviceInformationResponse
+	mu          sync.RWMutex
+	EventsXAddr string
+	DeviceInfo  *DeviceInformationResponse
 }
 
 // ClientOptions configures client creation
@@ -277,7 +277,7 @@ func (c *Client) SendSOAP(ctx context.Context, endpointURL string, action string
 		Body    struct {
 			Fault *struct {
 				Code struct {
-					Value    string `xml:"Value"`
+					Value   string `xml:"Value"`
 					Subcode *struct {
 						Value string `xml:"Value"`
 					} `xml:"Subcode"`

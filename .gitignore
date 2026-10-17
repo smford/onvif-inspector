@@ -5,3 +5,4 @@ dist/
 *.exe
 coverage.out
 config.yaml
+*.sarif
