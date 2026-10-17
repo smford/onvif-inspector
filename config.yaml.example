@@ -1,0 +1,34 @@
+# ==============================================================================
+# ONVIF-INSPECTOR Configuration
+# ==============================================================================
+# Save this file as 'config.yaml' in the working directory, or specify a custom
+# path using the --config / -c flag (e.g. ./onvif-inspector -c /path/to/config.yaml).
+
+# Default credentials applied to any camera discovered on the network
+# if no camera-specific match is found below:
+default:
+  username: "admin"
+  password: "YourDefaultCameraPassword"
+
+# Per-camera specific credentials and friendly aliases:
+# Cameras can be matched by IP address, target address (IP:port), or ONVIF endpoint UUID.
+cameras:
+  - name: "Front Door"
+    ip: "192.168.1.100"
+    username: "admin"
+    password: "FrontDoorSecretPassword"
+
+  - name: "Backyard"
+    target: "192.168.1.105:8000"
+    username: "operator"
+    password: "BackyardSecretPassword"
+
+  - name: "Garage"
+    endpoint: "urn:uuid:52044813-0982-41f2-8d77-a89a01c349a1"
+    username: "admin"
+    password: "GarageSecretPassword"
+
+# Optional network and interface defaults:
+# interface: "eth0"
+# target: "192.168.1.100:80"
+# web_port: 8080

@@ -1,0 +1,7 @@
+prompt.md
+/onvif-inspector
+bin/
+dist/
+*.exe
+coverage.out
+config.yaml
