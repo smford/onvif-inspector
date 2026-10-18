@@ -6,6 +6,16 @@
 
 ---
 
+## Screenshots
+
+### Interactive Terminal User Interface (TUI)
+![Interactive Terminal User Interface](docs/images/tui-screenshot.png)
+
+### Embedded Web Dashboard
+![Embedded Web Dashboard](docs/images/web-screenshot.png)
+
+---
+
 ## Key Features
 
 - **Zero Runtime Dependencies:** Pure Go implementation without CGO or Node.js/NPM dependencies. Self-contained static binary.
