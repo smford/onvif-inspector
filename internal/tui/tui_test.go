@@ -345,3 +345,72 @@ func TestTUIDevicesPaneRowLayoutAndAlignment(t *testing.T) {
 		}
 	}
 }
+
+func TestTUIAboutModal(t *testing.T) {
+	h := hub.NewHub(100)
+	m := NewModel(h, Options{
+		Version: "1.2.3",
+	})
+
+	newM, _ := m.Update(tea.WindowSizeMsg{Width: 100, Height: 30})
+	model := newM.(Model)
+
+	// Normal view should have ?:About in help
+	view := model.View()
+	if !strings.Contains(view, "?:About") {
+		t.Errorf("help bar missing '?:About': %s", view)
+	}
+
+	// Press '?' to open About modal
+	newM, _ = model.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'?'}})
+	model = newM.(Model)
+
+	if !model.isAbout {
+		t.Fatal("expected isAbout to be true after '?'")
+	}
+
+	aboutView := model.View()
+	if !strings.Contains(aboutView, "ABOUT ONVIF-INSPECTOR") {
+		t.Errorf("about modal missing title: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "onvif-inspector") {
+		t.Errorf("about modal missing app name: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "v1.2.3") {
+		t.Errorf("about modal missing version v1.2.3: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "http://stephenford.org/onvif-inspector/") {
+		t.Errorf("about modal missing project site: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "https://github.com/smford/onvif-inspector") {
+		t.Errorf("about modal missing github repo: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "Copyright (c) 2026 Stephen Ford") {
+		t.Errorf("about modal missing copyright: %s", aboutView)
+	}
+	if !strings.Contains(aboutView, "MIT License") {
+		t.Errorf("about modal missing license: %s", aboutView)
+	}
+
+	// Press Esc to close
+	newM, _ = model.Update(tea.KeyMsg{Type: tea.KeyEsc})
+	model = newM.(Model)
+
+	if model.isAbout {
+		t.Error("expected isAbout to be false after Esc")
+	}
+
+	// Test 'i' key also opens About modal
+	newM, _ = model.Update(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'i'}})
+	model = newM.(Model)
+	if !model.isAbout {
+		t.Error("expected isAbout to be true after 'i'")
+	}
+
+	// Test Enter closes About modal
+	newM, _ = model.Update(tea.KeyMsg{Type: tea.KeyEnter})
+	model = newM.(Model)
+	if model.isAbout {
+		t.Error("expected isAbout to be false after Enter")
+	}
+}

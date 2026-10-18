@@ -25,6 +25,7 @@ type Server struct {
 	appConfig      *config.Config
 	onConfigUpdate ConfigUpdateHandler
 	port           int
+	version        string
 	broker         *SSEBroker
 	httpServer     *http.Server
 	listener       net.Listener
@@ -37,12 +38,28 @@ type Config struct {
 	AppConfig      *config.Config
 	OnConfigUpdate ConfigUpdateHandler
 	Port           int
+	Version        string
+}
+
+// AboutInfo represents application metadata
+type AboutInfo struct {
+	Name       string `json:"name"`
+	Version    string `json:"version"`
+	DocsURL    string `json:"docs_url"`
+	RepoURL    string `json:"repo_url"`
+	Copyright  string `json:"copyright"`
+	License    string `json:"license"`
+	LicenseURL string `json:"license_url"`
 }
 
 // NewServer initializes a web server instance
 func NewServer(cfg Config) *Server {
 	if cfg.Port <= 0 {
 		cfg.Port = 8080
+	}
+	ver := cfg.Version
+	if ver == "" {
+		ver = "1.0.0"
 	}
 
 	broker := NewSSEBroker(cfg.Hub)
@@ -52,6 +69,7 @@ func NewServer(cfg Config) *Server {
 		appConfig:      cfg.AppConfig,
 		onConfigUpdate: cfg.OnConfigUpdate,
 		port:           cfg.Port,
+		version:        ver,
 		broker:         broker,
 	}
 }
@@ -64,6 +82,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/healthz", s.handleHealthz)
 
 	// REST endpoints
+	mux.HandleFunc("/api/about", s.handleAbout)
 	mux.HandleFunc("/api/devices", s.handleGetDevices)
 	mux.HandleFunc("/api/events", s.handleGetEvents)
 
@@ -329,4 +348,24 @@ func (s *Server) handleHealthz(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(map[string]string{
 		"status": "ok",
 	})
+}
+
+func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	info := AboutInfo{
+		Name:       "onvif-inspector",
+		Version:    s.version,
+		DocsURL:    "http://stephenford.org/onvif-inspector/",
+		RepoURL:    "https://github.com/smford/onvif-inspector",
+		Copyright:  "Copyright (c) 2026 Stephen Ford",
+		License:    "MIT License",
+		LicenseURL: "https://github.com/smford/onvif-inspector/blob/main/LICENSE",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(info)
 }

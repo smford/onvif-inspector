@@ -17,6 +17,9 @@ func (m Model) View() string {
 	if m.isConfiguring {
 		return m.renderConfigModal()
 	}
+	if m.isAbout {
+		return m.renderAboutModal()
+	}
 
 	headerView := m.renderHeader()
 	helpView := m.renderHelp()
@@ -473,6 +476,7 @@ func (m Model) renderHelp() string {
 		keyStyle.Render("d")+descStyle.Render(":Defaults"),
 		keyStyle.Render("/")+descStyle.Render(":Search"),
 		keyStyle.Render("x")+descStyle.Render(":XML"),
+		keyStyle.Render("?")+descStyle.Render(":About"),
 		keyStyle.Render("Space")+descStyle.Render(":Pause"),
 		keyStyle.Render("q")+descStyle.Render(":Quit"),
 	)
@@ -556,6 +560,78 @@ func (m Model) renderConfigModal() string {
 		"",
 		lipgloss.JoinHorizontal(lipgloss.Center, hints),
 	)
+
+	content := lipgloss.JoinVertical(lipgloss.Left, elements...)
+
+	dialogBox := lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(ColorPrimary).
+		Background(ColorDarkBg).
+		Padding(1, 2).
+		Width(boxWidth).
+		Render(content)
+
+	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, dialogBox)
+}
+
+func (m Model) renderAboutModal() string {
+	boxWidth := 66
+	if m.width-4 < boxWidth {
+		boxWidth = m.width - 4
+	}
+	if boxWidth < 36 {
+		boxWidth = 36
+	}
+
+	titleStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#FFFFFF")).Background(ColorPrimary).Padding(0, 1)
+	title := titleStyle.Render(" ABOUT ONVIF-INSPECTOR ")
+
+	appName := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#38BDF8")).Render("onvif-inspector")
+	verStr := m.version
+	if verStr == "" {
+		verStr = "1.0.0"
+	}
+	appVer := lipgloss.NewStyle().Foreground(lipgloss.Color("#CBD5E1")).Render(" v" + strings.TrimPrefix(verStr, "v"))
+
+	nameLine := lipgloss.JoinHorizontal(lipgloss.Center, "📹 ", appName, appVer)
+	desc := lipgloss.NewStyle().Foreground(ColorMuted).Render("High-performance ONVIF WS-Discovery & Event Monitor")
+
+	lblStyle := lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("#E2E8F0"))
+	linkStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("#60A5FA")).Underline(true)
+	valStyle := lipgloss.NewStyle().Foreground(lipgloss.Color("#CBD5E1"))
+
+	docsLabel := lblStyle.Render("Project Site:")
+	docsLink := linkStyle.Render("http://stephenford.org/onvif-inspector/")
+
+	repoLabel := lblStyle.Render("GitHub Repo:")
+	repoLink := linkStyle.Render("https://github.com/smford/onvif-inspector")
+
+	crLabel := lblStyle.Render("Copyright:")
+	crVal := valStyle.Render("Copyright (c) 2026 Stephen Ford")
+
+	licLabel := lblStyle.Render("License:")
+	licVal := valStyle.Render("MIT License")
+
+	closeBtn := lipgloss.NewStyle().
+		Padding(0, 2).
+		Bold(true).
+		Foreground(lipgloss.Color("#FFFFFF")).
+		Background(ColorPrimary).
+		Render("[ PRESS ESC OR ENTER TO CLOSE ]")
+
+	elements := []string{
+		lipgloss.JoinHorizontal(lipgloss.Center, title),
+		"",
+		lipgloss.JoinHorizontal(lipgloss.Center, nameLine),
+		lipgloss.JoinHorizontal(lipgloss.Center, desc),
+		"",
+		fmt.Sprintf("  %s %s", docsLabel, docsLink),
+		fmt.Sprintf("  %s  %s", repoLabel, repoLink),
+		fmt.Sprintf("  %s    %s", crLabel, crVal),
+		fmt.Sprintf("  %s      %s", licLabel, licVal),
+		"",
+		lipgloss.JoinHorizontal(lipgloss.Center, closeBtn),
+	}
 
 	content := lipgloss.JoinVertical(lipgloss.Left, elements...)
 

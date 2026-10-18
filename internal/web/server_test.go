@@ -95,6 +95,33 @@ func TestWebServerEndpoints(t *testing.T) {
 	if len(evs) != 1 || evs[0].ID != "evt-web-1" {
 		t.Errorf("unexpected events: %+v", evs)
 	}
+
+	// 4. Test /api/about
+	req = httptest.NewRequest(http.MethodGet, "/api/about", nil)
+	rec = httptest.NewRecorder()
+	handler.ServeHTTP(rec, req)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected 200 for /api/about, got %d", rec.Code)
+	}
+	var about AboutInfo
+	if err := json.Unmarshal(rec.Body.Bytes(), &about); err != nil {
+		t.Fatalf("failed to decode about JSON: %v", err)
+	}
+	if about.Name != "onvif-inspector" {
+		t.Errorf("expected name onvif-inspector, got %s", about.Name)
+	}
+	if about.DocsURL != "http://stephenford.org/onvif-inspector/" {
+		t.Errorf("unexpected docs_url: %s", about.DocsURL)
+	}
+	if about.RepoURL != "https://github.com/smford/onvif-inspector" {
+		t.Errorf("unexpected repo_url: %s", about.RepoURL)
+	}
+	if !strings.Contains(about.Copyright, "Stephen Ford") {
+		t.Errorf("unexpected copyright: %s", about.Copyright)
+	}
+	if !strings.Contains(about.License, "MIT") {
+		t.Errorf("unexpected license: %s", about.License)
+	}
 }
 
 func TestSSEStream(t *testing.T) {

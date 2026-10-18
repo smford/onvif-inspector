@@ -46,6 +46,12 @@
   const elBtnClearCamForm = document.getElementById('btn-clear-cam-form');
   const elCfgCamerasList = document.getElementById('cfg-cameras-list');
 
+  // DOM Elements - About Modal
+  const elBtnAbout = document.getElementById('btn-about');
+  const elAboutModal = document.getElementById('about-modal');
+  const elAboutModalClose = document.getElementById('about-modal-close');
+  const elAboutAppVersion = document.getElementById('about-app-version');
+
   // Initialize
   init();
 
@@ -119,10 +125,24 @@
       elCfgCamPassword.value = '';
     });
 
+    // About modal
+    if (elBtnAbout) {
+      elBtnAbout.addEventListener('click', openAboutModal);
+    }
+    if (elAboutModalClose) {
+      elAboutModalClose.addEventListener('click', closeAboutModal);
+    }
+    if (elAboutModal) {
+      elAboutModal.addEventListener('click', (e) => {
+        if (e.target === elAboutModal) closeAboutModal();
+      });
+    }
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal();
         closeConfigModal();
+        closeAboutModal();
       }
     });
   }
@@ -353,6 +373,28 @@
 
   function closeModal() {
     elModal.classList.add('hidden');
+  }
+
+  // --- About Modal ---
+
+  async function openAboutModal() {
+    if (!elAboutModal) return;
+    elAboutModal.classList.remove('hidden');
+    try {
+      const resp = await fetch('/api/about');
+      if (resp.ok) {
+        const info = await resp.json();
+        if (elAboutAppVersion && info.version) {
+          elAboutAppVersion.textContent = info.version;
+        }
+      }
+    } catch (_) {}
+  }
+
+  function closeAboutModal() {
+    if (elAboutModal) {
+      elAboutModal.classList.add('hidden');
+    }
   }
 
   // --- Configuration Management ---

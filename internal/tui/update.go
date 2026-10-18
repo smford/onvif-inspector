@@ -55,6 +55,24 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		cmds = append(cmds, waitForDevice(m.deviceCh))
 
 	case tea.KeyMsg:
+		if m.isAbout {
+			switch msg.String() {
+			case "ctrl+c":
+				if m.unsubEvent != nil {
+					m.unsubEvent()
+				}
+				if m.unsubDevice != nil {
+					m.unsubDevice()
+				}
+				return m, tea.Quit
+			case "esc", "enter", "q", "space", "?", "i":
+				m.isAbout = false
+				return m, nil
+			default:
+				return m, nil
+			}
+		}
+
 		if m.isConfiguring {
 			switch msg.String() {
 			case "esc":
@@ -274,6 +292,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "x":
 			m.showRawXML = !m.showRawXML
 			m.inspectorScroll = 0
+			return m, nil
+
+		case "?", "i":
+			m.isAbout = true
 			return m, nil
 
 		case "up", "k":

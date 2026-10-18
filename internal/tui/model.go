@@ -30,6 +30,7 @@ type ConfigUpdateFunc func(target, username, password string)
 type Options struct {
 	AppConfig      *config.Config
 	OnConfigUpdate ConfigUpdateFunc
+	Version        string
 }
 
 // Model is the main state of the Terminal User Interface
@@ -40,6 +41,8 @@ type Model struct {
 	unsubEvent  func()
 	unsubDevice func()
 
+	version        string
+	isAbout        bool
 	appConfig      *config.Config
 	onConfigUpdate ConfigUpdateFunc
 
@@ -82,9 +85,13 @@ func NewModel(h *hub.Hub, opts ...Options) Model {
 
 	var cfg *config.Config
 	var onUpdate ConfigUpdateFunc
+	ver := "1.0.0"
 	if len(opts) > 0 {
 		cfg = opts[0].AppConfig
 		onUpdate = opts[0].OnConfigUpdate
+		if opts[0].Version != "" {
+			ver = opts[0].Version
+		}
 	}
 
 	var cfgInputs [4]textinput.Model
@@ -122,6 +129,7 @@ func NewModel(h *hub.Hub, opts ...Options) Model {
 		deviceCh:       devCh,
 		unsubEvent:     unsubEv,
 		unsubDevice:    unsubDev,
+		version:        ver,
 		appConfig:      cfg,
 		onConfigUpdate: onUpdate,
 		activePane:     PaneFeed,

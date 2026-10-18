@@ -511,7 +511,8 @@ func main() {
 			OnConfigUpdate: func(target, username, password string) {
 				coord.RestartWorkerWithCredentials(target, username, password)
 			},
-			Port: webPortFlag,
+			Port:    webPortFlag,
+			Version: version,
 		})
 		if err := webServer.Start(); err != nil {
 			fmt.Fprintf(os.Stderr, "Failed to start web dashboard: %v\n", err)
@@ -612,6 +613,7 @@ func runTUI(h *hub.Hub, cfg *config.Config, onConfigUpdate func(target, username
 	model := tui.NewModel(h, tui.Options{
 		AppConfig:      cfg,
 		OnConfigUpdate: onConfigUpdate,
+		Version:        version,
 	})
 	p := tea.NewProgram(model, tea.WithAltScreen())
 	if _, err := p.Run(); err != nil {
